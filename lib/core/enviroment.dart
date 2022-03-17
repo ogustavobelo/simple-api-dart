@@ -1,50 +1,56 @@
 import 'dart:io';
 
-const _host = '0.0.0.0';
-const _databaseHost = '0.0.0.0';
-const _serverPort = 3000;
-const _databasePort = 27017;
+const _kHost = '0.0.0.0';
+const _kDatabaseHost = '0.0.0.0';
+const _kServerPort = 3000;
+const _kDatabasePort = 27017;
 
-class Environment {
-  final bool isProd;
-  final String host;
-  final int serverPort;
-  final String dbHost;
-  final int dbPort;
+abstract class Environment {
+  bool get isProd;
+  String get host;
+  int get serverPort;
+  String get dbHost;
+  int get dbPort;
+}
 
-  const Environment({
-    required this.serverPort,
-    required this.dbPort,
-    required this.dbHost,
-    required this.host,
-    this.isProd = false,
-  });
+class EnvironmentBuild implements Environment {
+  static const bool _isProd = bool.fromEnvironment("IS_PROD");
+  @override
+  bool get isProd => _isProd;
 
-  static Environment fromEnv() {
-    final host = Platform.environment['HOST'] ?? _host;
-    final dbHost = Platform.environment['DATABASE_HOST'] ?? _databaseHost;
-    final serverPort = int.tryParse(Platform.environment['SERVER_PORT'] ?? "") ?? _serverPort;
-    final dbPort = int.tryParse(Platform.environment['DATABASE_PORT'] ?? "") ?? _databasePort;
-    return Environment(
-      serverPort: serverPort,
-      dbPort: dbPort,
-      dbHost: dbHost,
-      host: host,
-    );
-  }
+  static const String _host =
+      String.fromEnvironment("HOST", defaultValue: _kHost);
+  @override
+  String get host => _host;
 
-  static Environment fromBuild() {
-    const bool isProd = bool.fromEnvironment("IS_PROD");
-    const String host = String.fromEnvironment("HOST", defaultValue: _host);
-    const int serverPort = int.fromEnvironment("SERVER_PORT");
-    const int dbPort = int.fromEnvironment("DATABASE_PORT", defaultValue: _databasePort);
-    const String dbHost = String.fromEnvironment("DATABASE_HOST", defaultValue: _databaseHost);
-    return Environment(
-      isProd: isProd,
-      host: host,
-      dbPort: dbPort,
-      dbHost: dbHost,
-      serverPort: serverPort,
-    );
-  }
+  static const int _serverPort = int.fromEnvironment("SERVER_PORT", defaultValue: _kServerPort);
+  @override
+  int get serverPort => _serverPort;
+
+  static const int _dbPort =
+      int.fromEnvironment("DATABASE_PORT", defaultValue: _kDatabasePort);
+  @override
+  int get dbPort => _dbPort;
+
+  static const String _dbHost =
+      String.fromEnvironment("DATABASE_HOST", defaultValue: _kDatabaseHost);
+  @override
+  String get dbHost => _dbHost;
+}
+
+class EnvironmentPlatform implements Environment {
+  @override
+  bool get isProd => Platform.environment['IS_PROD'] == "true";
+
+  @override
+  String get host => Platform.environment['HOST'] ?? _kHost;
+
+  @override
+  int get serverPort => int.tryParse(Platform.environment['SERVER_PORT'] ?? "") ?? _kServerPort;
+
+  @override
+  int get dbPort => int.tryParse(Platform.environment['DATABASE_PORT'] ?? "") ?? _kDatabasePort;
+
+  @override
+  String get dbHost => Platform.environment['DATABASE_HOST'] ?? _kDatabaseHost;
 }
