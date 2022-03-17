@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:simple_crud/core/extensions/strings_extensions.dart';
 part 'user_model.g.dart';
 
 @JsonSerializable(explicitToJson: true)
@@ -22,7 +23,7 @@ class User {
     required String email,
   }) {
     return User(
-      uid: "UID",
+      uid: StringUtils.uuid(),
       name: name,
       email: email,
       createdAt: DateTime.now(),
