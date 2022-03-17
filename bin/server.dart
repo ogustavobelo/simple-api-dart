@@ -2,12 +2,12 @@ import 'package:shelf/shelf.dart';
 import 'package:shelf/shelf_io.dart';
 import 'package:simple_crud/controllers/generic/generic_routes.dart';
 import 'package:simple_crud/controllers/users/users_routes.dart';
-import 'package:simple_crud/core/dependecy_injection/getit.dart';
+import 'package:simple_crud/core/dependecy_injection/dependecy_injection.dart';
 import 'package:simple_crud/core/enviroment.dart';
 
 void main(List<String> args) async {
   final environment = EnvironmentBuild();
-  await configureDependencies(environment);
+  await dependenciesSetup(environment);
 
   final _router = Cascade()
       .add(getIt<UsersController>().router)

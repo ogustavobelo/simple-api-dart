@@ -1,5 +1,5 @@
 import 'package:mongo_dart/mongo_dart.dart';
-import 'package:simple_crud/core/dependecy_injection/getit.dart';
+import 'package:simple_crud/core/dependecy_injection/dependecy_injection.dart';
 import 'package:simple_crud/core/enviroment.dart';
 
 abstract class AccessDatabase {
