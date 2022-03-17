@@ -13,8 +13,18 @@ final getIt = GetIt.instance;
   preferRelativeImports: true,
   asExtension: false,
 )
-void configureDependencies(Environment env, Db database) {
+Future<void> configureDependencies(Environment env) async {
   getIt.registerSingleton<Environment>(env);
+  final database = await createDB(env.dbHost, env.dbPort);
   getIt.registerFactory<AccessDatabase>(() => AccessDatabaseImpl(database));
   $initGetIt(getIt);
+}
+
+Future<Db> createDB(String dbHost, int dbPort) async {
+  final dbPath = "mongodb://$dbHost:$dbPort/crud";
+  print("Starting db on path $dbPath at ${DateTime.now().toIso8601String()}...");
+  final db = await Db.create(dbPath);
+  await db.open();
+  print("Database inited successfully!");
+  return db;
 }

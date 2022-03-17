@@ -10,27 +10,15 @@ import 'package:simple_crud/core/enviroment.dart';
 
 void main(List<String> args) async {
   final host = Platform.environment['HOST'] ?? '0.0.0.0';
+  final dbHost = Platform.environment['DATABASE_HOST'] ?? '0.0.0.0';
   final serverPort = int.parse(Platform.environment['SERVER_PORT'] ?? '3000');
   final dbPort = int.parse(Platform.environment['DATABASE_PORT'] ?? '27017');
-  final environment = Environment(serverPort: serverPort, dbPort: dbPort, host: host);
-  configureDependencies(environment, await createDB());
+  final environment = Environment(serverPort: serverPort, dbPort: dbPort, dbHost: dbHost, host: host);
+  await configureDependencies(environment);
 
-  // Set all available routes
-  final userController = getIt<UsersController>();
-  final _router = Cascade().add(userController.router).add(GenericController().router).handler;
-  // Configure a pipeline that logs requests.
+  final _router = Cascade().add(getIt<UsersController>().router).add(GenericController().router).handler;
   final _handler = Pipeline().addMiddleware(logRequests()).addHandler(_router);
 
   final server = await serve(_handler, host, serverPort);
   print('Server listening on port ${server.address.host}:${server.port}');
-}
-
-Future<Db> createDB() async {
-  final dbPath = "mongodb://mongodb:27017/crud";
-  print("Starting db on path $dbPath at ${DateTime.now().toIso8601String()}...");
-
-  final db = await Db.create(dbPath);
-  await db.open();
-  print("Database inited successfully!");
-  return db;
 }
