@@ -12,9 +12,7 @@ class AccessDatabaseImpl implements AccessDatabase {
   @override
   Future<List<Map<String, dynamic>>> listAll(String collection) async {
     try {
-      print("database is connected ${instance.isConnected}");
       final result = await instance.collection(collection).find().toList();
-      print("count ${result.length}");
       return result;
     } catch (e) {
       rethrow;

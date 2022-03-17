@@ -5,6 +5,7 @@ import 'package:mongo_dart/mongo_dart.dart';
 import 'package:simple_crud/core/dependecy_injection/getit.config.dart';
 import 'package:simple_crud/core/enviroment.dart';
 import 'package:simple_crud/data/datasources/local/database/acess_database.dart';
+import 'package:simple_crud/data/datasources/local/database/dev_database.dart';
 
 final getIt = GetIt.instance;
 
@@ -15,8 +16,14 @@ final getIt = GetIt.instance;
 )
 Future<void> configureDependencies(Environment env) async {
   getIt.registerSingleton<Environment>(env);
-  final database = await createDB(env.dbHost, env.dbPort);
-  getIt.registerFactory<AccessDatabase>(() => AccessDatabaseImpl(database));
+  late AccessDatabase accessDatabase;
+  if (env.isProd) {
+    final database = await createDB(env.dbHost, env.dbPort);
+    accessDatabase = AccessDatabaseImpl(database);
+  } else {
+    accessDatabase = DevDatabase();
+  }
+  getIt.registerFactory<AccessDatabase>(() => accessDatabase);
   $initGetIt(getIt);
 }
 
