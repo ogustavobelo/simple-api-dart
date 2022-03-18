@@ -9,7 +9,7 @@ class SaveUserUseCase {
   }) : _repository = repository;
   final UserRepository _repository;
 
-  Future<void> call(User user) {
+  Future<User> call(User user) {
     return _repository.saveUser(user);
   }
 }

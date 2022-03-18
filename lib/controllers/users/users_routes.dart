@@ -68,9 +68,11 @@ class UsersController {
       }
 
       final user = User.simple(name: name!, email: email!);
-      await _saveUserUC(user);
+      final savedUser = await _saveUserUC(user);
       return _utils.success(
-          message: 'User ${user.name} created successfully!\n');
+        message: 'User ${user.name} created successfully!\n',
+        aJson: savedUser.toJson(),
+      );
     } catch (e, st) {
       return _utils.error("Cannot save User", error: e, stackTrace: st);
     }

@@ -14,7 +14,7 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   @override
-  Future<void> saveUser(User user) {
+  Future<User> saveUser(User user) {
     return _localDataSource.saveUser(user);
   }
 }

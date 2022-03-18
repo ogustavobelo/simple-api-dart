@@ -9,7 +9,9 @@ class DevDatabase implements AccessDatabase {
   }
 
   @override
-  Future<void> save(String collection, Map<String, dynamic> object) async {
+  Future<Map<String, dynamic>> save(
+      String collection, Map<String, dynamic> object) async {
     localUsers.add(object);
+    return object;
   }
 }
