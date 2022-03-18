@@ -1,6 +1,7 @@
 import 'package:mocktail/mocktail.dart';
 import 'package:shelf/shelf.dart';
 import 'package:simple_crud/controllers/users/users_routes.dart';
+import 'package:simple_crud/data/models/mappers/user_serialize_mapper.dart';
 import 'package:simple_crud/data/models/user/user_model.dart';
 import 'package:simple_crud/domain/usecases/list_users_usecase.dart';
 import 'package:simple_crud/domain/usecases/save_user_usecase.dart';

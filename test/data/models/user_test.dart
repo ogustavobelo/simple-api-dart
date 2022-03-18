@@ -7,7 +7,7 @@ import '../../fixtures/user_fixture.dart';
 void main() {
   group("UserModel >", () {
     test("Should parse FROM JSON correctly", () {
-      final result = User.fromJson(UserFixture.json);
+      final result = UserModel.fromJson(UserFixture.json);
       expect(result.uid, "uid");
       expect(result.name, "name");
       expect(result.email, "email");
@@ -25,7 +25,7 @@ void main() {
     });
 
     test("Should create a User Object from simple infos", () {
-      final result = User.simple(name: "name", email: "email");
+      final result = UserModel.simple(name: "name", email: "email");
       expect(result.uid, isNotNull);
       expect(result.createdAt, isNotNull);
       expect(result.name, "name");

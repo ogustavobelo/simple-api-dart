@@ -6,7 +6,7 @@ import 'package:simple_crud/data/models/user/user_model.dart';
 
 abstract class UsersLocalDataSource {
   Future<UserCollection> listUsers();
-  Future<User> saveUser(User user);
+  Future<UserModel> saveUser(UserModel user);
 }
 
 @Injectable(as: UsersLocalDataSource)
@@ -18,7 +18,7 @@ class UsersLocalDataSourceImpl implements UsersLocalDataSource {
   Future<UserCollection> listUsers() async {
     try {
       final usersMap = await _database.listAll(Collections.users);
-      final parsedUsers = usersMap.map<User>((e) => User.fromJson(e)).toList();
+      final parsedUsers = usersMap.map<UserModel>((e) => UserModel.fromJson(e)).toList();
       return UserCollection(parsedUsers);
     } catch (e) {
       throw LocalDataSourceException(message: "Cannot list users");
@@ -26,10 +26,10 @@ class UsersLocalDataSourceImpl implements UsersLocalDataSource {
   }
 
   @override
-  Future<User> saveUser(User user) async {
+  Future<UserModel> saveUser(UserModel user) async {
     try {
       final savedUser = await _database.save(Collections.users, user.toJson());
-      return User.fromJson(savedUser);
+      return UserModel.fromJson(savedUser);
     } catch (e) {
       throw LocalDataSourceException(message: "Cannot save user ${user.email}");
     }

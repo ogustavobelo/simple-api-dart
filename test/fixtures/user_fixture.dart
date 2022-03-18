@@ -9,7 +9,7 @@ class UserFixture {
     "updatedAt": "2022-03-18T02:57:27.846813",
   };
 
-  static User model = User(
+  static UserModel model = UserModel(
     uid: "uid",
     name: "name",
     email: "email",
