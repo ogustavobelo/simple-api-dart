@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:injectable/injectable.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
-import 'package:simple_crud/controllers/response_utils.dart';
+import 'package:simple_crud/controllers/base/base_controller.dart';
 import 'package:simple_crud/domain/models/user/user_model.dart';
 import 'package:simple_crud/domain/usecases/list_users_usecase.dart';
 import 'package:simple_crud/domain/usecases/save_user_usecase.dart';
@@ -12,15 +12,12 @@ import 'package:simple_crud/core/extensions/strings_extensions.dart';
 part 'users_routes.g.dart';
 
 @singleton
-class UsersController {
+class UsersController extends BaseController {
   UsersController({
     required ListUserUseCase listUserUseCase,
     required SaveUserUseCase saveUserUseCase,
-    required ResponseUtils utils,
   })  : _listUsersUC = listUserUseCase,
-        _saveUserUC = saveUserUseCase,
-        _utils = utils;
-  final ResponseUtils _utils;
+        _saveUserUC = saveUserUseCase;
   final ListUserUseCase _listUsersUC;
   final SaveUserUseCase _saveUserUC;
 
@@ -30,10 +27,10 @@ class UsersController {
       final authorization = request.headers["authorization"];
       if (authorization == null) return Response.forbidden("Token not found");
       final users = await _listUsersUC();
-      return _utils.success(
+      return success(
           aJson: users.toJson(), message: "${users.users.length} user listed");
     } catch (e, st) {
-      return _utils.error("Cannot fetch Users", error: e, stackTrace: st);
+      return error("Cannot fetch Users", error: e, stackTrace: st);
     }
   }
 
@@ -64,17 +61,17 @@ class UsersController {
       final name = json["name"] as String?;
 
       if (email.isEmptyOrNull || name.isEmptyOrNull) {
-        return _utils.error("Name and Email is required");
+        return error("Name and Email is required");
       }
 
       final user = User.simple(name: name!, email: email!);
       final savedUser = await _saveUserUC(user);
-      return _utils.success(
+      return success(
         message: 'User ${user.name} created successfully!\n',
         aJson: savedUser.toJson(),
       );
     } catch (e, st) {
-      return _utils.error("Cannot save User", error: e, stackTrace: st);
+      return error("Cannot save User", error: e, stackTrace: st);
     }
   }
 

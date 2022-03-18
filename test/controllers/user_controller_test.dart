@@ -1,6 +1,5 @@
 import 'package:mocktail/mocktail.dart';
 import 'package:shelf/shelf.dart';
-import 'package:simple_crud/controllers/response_utils.dart';
 import 'package:simple_crud/controllers/users/users_routes.dart';
 import 'package:simple_crud/domain/models/user/user_model.dart';
 import 'package:simple_crud/domain/usecases/list_users_usecase.dart';
@@ -19,11 +18,9 @@ void main() {
   group("UserController >", () {
     final listUserMock = MockListUserUseCase();
     final saveUserMock = MockSaveUserUseCase();
-    final utils = ResponseUtils();
     final sut = UsersController(
       listUserUseCase: listUserMock,
       saveUserUseCase: saveUserMock,
-      utils: utils,
     );
 
     group("List User >", () {

@@ -1,13 +1,10 @@
 import 'dart:convert';
 
-import 'package:injectable/injectable.dart';
 import 'package:shelf/shelf.dart';
 import 'package:simple_crud/core/dependecy_injection/dependecy_injection.dart';
 import 'package:simple_crud/core/logger/logger.dart';
 
-@injectable
-class ResponseUtils {
-  ResponseUtils();
+class BaseController {
   final logger = getIt<Logger>();
 
   Response success({Map<String, dynamic>? aJson, String? message}) {
