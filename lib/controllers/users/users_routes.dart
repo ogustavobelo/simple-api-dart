@@ -4,7 +4,9 @@ import 'package:injectable/injectable.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
 import 'package:simple_crud/controllers/response_utils.dart';
-import 'package:simple_crud/data/models/user/user_model.dart';
+import 'package:simple_crud/core/dependecy_injection/dependecy_injection.dart';
+import 'package:simple_crud/core/logger/logger.dart';
+import 'package:simple_crud/domain/models/user/user_model.dart';
 import 'package:simple_crud/domain/usecases/list_users_usecase.dart';
 import 'package:simple_crud/domain/usecases/save_user_usecase.dart';
 import 'package:simple_crud/core/extensions/strings_extensions.dart';
@@ -24,6 +26,8 @@ class UsersController {
   final ListUserUseCase _listUsersUC;
   final SaveUserUseCase _saveUserUC;
 
+  final logger = getIt<Logger>();
+
   @Route.get('/users')
   Future<Response> listUsers(Request request) async {
     try {
@@ -31,7 +35,8 @@ class UsersController {
       if (authorization == null) return Response.forbidden("Token not found");
       final users = await _listUsersUC();
       return _utils.success(users.toJson());
-    } catch (e) {
+    } catch (e, st) {
+      logger.debug("Cannot fetch Users", e, st);
       return _utils.error("Cannot fetch Users");
     }
   }
@@ -40,23 +45,19 @@ class UsersController {
   Response _listUser(Request request) {
     final id = request.params['id'];
     final authorization = request.headers["authorization"];
-    print(authorization);
+    logger.info(authorization ?? "Empty");
     return Response.ok('$id\n');
   }
 
   @Route.put('/users/<id>')
   Response _updateUser(Request request) {
     final id = request.params['id'];
-    final authorization = request.headers["authorization"];
-    print(authorization);
     return Response.ok('$id\n');
   }
 
   @Route.delete('/users/<id>')
   Response _deleteUser(Request request) {
     final id = request.params['id'];
-    final authorization = request.headers["authorization"];
-    print(authorization);
     return Response.ok('$id\n');
   }
 
@@ -74,7 +75,8 @@ class UsersController {
       final user = User.simple(name: name!, email: email!);
       await _saveUserUC(user);
       return Response.ok('User ${user.name} created successfully!\n');
-    } catch (e) {
+    } catch (e, st) {
+      logger.debug("Cannot save User", e, st);
       return _utils.error("Cannot save User");
     }
   }

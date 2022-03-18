@@ -2,17 +2,20 @@ import 'package:mocktail/mocktail.dart';
 import 'package:shelf/shelf.dart';
 import 'package:simple_crud/controllers/response_utils.dart';
 import 'package:simple_crud/controllers/users/users_routes.dart';
-import 'package:simple_crud/data/models/user/user_model.dart';
+import 'package:simple_crud/domain/models/user/user_model.dart';
 import 'package:simple_crud/domain/usecases/list_users_usecase.dart';
 import 'package:simple_crud/domain/usecases/save_user_usecase.dart';
 import 'package:test/expect.dart';
 import 'package:test/scaffolding.dart';
+
+import '../core/dependency_injection/dependency_injection.test.dart';
 
 class MockListUserUseCase extends Mock implements ListUserUseCase {}
 
 class MockSaveUserUseCase extends Mock implements SaveUserUseCase {}
 
 void main() {
+  dependenciesTestSetup();
   group("UserController >", () {
     final listUserMock = MockListUserUseCase();
     final saveUserMock = MockSaveUserUseCase();

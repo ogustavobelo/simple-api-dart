@@ -2,7 +2,10 @@ import 'package:http/http.dart';
 import 'package:test/test.dart';
 import 'package:test_process/test_process.dart';
 
+import 'core/dependency_injection/dependency_injection.test.dart';
+
 void main() {
+  dependenciesTestSetup();
   group(
     "Server Test >",
     () {

@@ -1,6 +1,6 @@
 import 'package:mocktail/mocktail.dart';
 import 'package:simple_crud/data/datasources/local/users/users_local_datasource.dart';
-import 'package:simple_crud/data/models/user/user_model.dart';
+import 'package:simple_crud/domain/models/user/user_model.dart';
 import 'package:simple_crud/data/repositories/user_repository_impl.dart';
 import 'package:test/test.dart';
 

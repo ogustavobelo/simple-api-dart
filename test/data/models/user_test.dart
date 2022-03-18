@@ -1,4 +1,4 @@
-import 'package:simple_crud/data/models/user/user_model.dart';
+import 'package:simple_crud/domain/models/user/user_model.dart';
 import 'package:test/expect.dart';
 import 'package:test/scaffolding.dart';
 

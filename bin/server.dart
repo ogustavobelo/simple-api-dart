@@ -4,8 +4,9 @@ import 'package:simple_crud/controllers/generic/generic_routes.dart';
 import 'package:simple_crud/controllers/users/users_routes.dart';
 import 'package:simple_crud/core/dependecy_injection/dependecy_injection.dart';
 import 'package:simple_crud/core/enviroment.dart';
+import 'package:simple_crud/core/logger/logger.dart';
 
-void main(List<String> args) async {
+void main(_) async {
   final environment = EnvironmentBuild();
   await dependenciesSetup(environment);
 
@@ -17,5 +18,6 @@ void main(List<String> args) async {
 
   final server =
       await serve(_handler, environment.host, environment.serverPort);
-  print('Server listening on port ${server.address.host}:${server.port}');
+  getIt<Logger>()
+      .info('Server listening on port ${server.address.host}:${server.port}');
 }

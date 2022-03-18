@@ -12,6 +12,7 @@ dependencies:
   get_it: ^7.2.0
   injectable: ^1.5.3
   json_annotation: ^4.4.0
+  logger: ^1.1.0
   mongo_dart: ^0.7.4
   shelf: ^1.1.0
   shelf_router: ^1.0.0

@@ -1,5 +1,5 @@
 import 'package:injectable/injectable.dart';
-import 'package:simple_crud/data/models/user/user_model.dart';
+import 'package:simple_crud/domain/models/user/user_model.dart';
 import 'package:simple_crud/domain/repositories/user_repository.dart';
 
 @injectable
