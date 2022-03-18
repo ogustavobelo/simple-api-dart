@@ -4,7 +4,7 @@ import 'package:injectable/injectable.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
 import 'package:simple_crud/controllers/base/base_controller.dart';
-import 'package:simple_crud/domain/models/user/user_model.dart';
+import 'package:simple_crud/data/models/user/user_model.dart';
 import 'package:simple_crud/domain/usecases/list_users_usecase.dart';
 import 'package:simple_crud/domain/usecases/save_user_usecase.dart';
 import 'package:simple_crud/core/extensions/strings_extensions.dart';

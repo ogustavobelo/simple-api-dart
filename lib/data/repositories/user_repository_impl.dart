@@ -1,6 +1,6 @@
 import 'package:injectable/injectable.dart';
 import 'package:simple_crud/data/datasources/local/users/users_local_datasource.dart';
-import 'package:simple_crud/domain/models/user/user_model.dart';
+import 'package:simple_crud/data/models/user/user_model.dart';
 import 'package:simple_crud/domain/repositories/user_repository.dart';
 
 @Injectable(as: UserRepository)
