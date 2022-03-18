@@ -10,7 +10,8 @@ void main() {
     "Server Test >",
     () {
       final port = '3000';
-      final host = 'http://0.0.0.0:$port';
+      final serverHost = "0.0.0.0";
+      final host = 'http://$serverHost:$port';
 
       setUp(() async {
         await TestProcess.start(
@@ -18,7 +19,7 @@ void main() {
           [
             'run',
             "--define=IS_PROD=false --define=SERVER_PORT=$port "
-                "--define=HOST=$host",
+                "--define=HOST=$serverHost",
             'bin/server.dart',
           ],
         );
