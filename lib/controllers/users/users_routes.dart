@@ -4,8 +4,6 @@ import 'package:injectable/injectable.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
 import 'package:simple_crud/controllers/response_utils.dart';
-import 'package:simple_crud/core/dependecy_injection/dependecy_injection.dart';
-import 'package:simple_crud/core/logger/logger.dart';
 import 'package:simple_crud/domain/models/user/user_model.dart';
 import 'package:simple_crud/domain/usecases/list_users_usecase.dart';
 import 'package:simple_crud/domain/usecases/save_user_usecase.dart';
@@ -26,18 +24,16 @@ class UsersController {
   final ListUserUseCase _listUsersUC;
   final SaveUserUseCase _saveUserUC;
 
-  final logger = getIt<Logger>();
-
   @Route.get('/users')
   Future<Response> listUsers(Request request) async {
     try {
       final authorization = request.headers["authorization"];
       if (authorization == null) return Response.forbidden("Token not found");
       final users = await _listUsersUC();
-      return _utils.success(users.toJson());
+      return _utils.success(
+          aJson: users.toJson(), message: "${users.users.length} user listed");
     } catch (e, st) {
-      logger.debug("Cannot fetch Users", e, st);
-      return _utils.error("Cannot fetch Users");
+      return _utils.error("Cannot fetch Users", error: e, stackTrace: st);
     }
   }
 
@@ -45,7 +41,6 @@ class UsersController {
   Response _listUser(Request request) {
     final id = request.params['id'];
     final authorization = request.headers["authorization"];
-    logger.info(authorization ?? "Empty");
     return Response.ok('$id\n');
   }
 
@@ -74,10 +69,10 @@ class UsersController {
 
       final user = User.simple(name: name!, email: email!);
       await _saveUserUC(user);
-      return Response.ok('User ${user.name} created successfully!\n');
+      return _utils.success(
+          message: 'User ${user.name} created successfully!\n');
     } catch (e, st) {
-      logger.debug("Cannot save User", e, st);
-      return _utils.error("Cannot save User");
+      return _utils.error("Cannot save User", error: e, stackTrace: st);
     }
   }
 
