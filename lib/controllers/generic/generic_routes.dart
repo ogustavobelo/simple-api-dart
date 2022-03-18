@@ -7,7 +7,7 @@ part 'generic_routes.g.dart';
 class GenericController extends BaseController {
   @Route.get('/')
   Response _rootHandler(Request req) {
-    return success(message: 'Simple Crud Dart API!\n');
+    return message('Simple Crud Dart API!\n');
   }
 
   Router get router => _$GenericControllerRouter(this);

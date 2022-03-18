@@ -30,7 +30,8 @@ void main() {
         headers: {"authorization": "Bearer auth"},
       );
       test("When success should return a 200 status code", () async {
-        when(() => listUserMock.call()).thenAnswer((_) async => UserCollection([]));
+        when(() => listUserMock.call())
+            .thenAnswer((_) async => UserCollection([]).serialize());
 
         final result = await sut.listUsers(request);
 

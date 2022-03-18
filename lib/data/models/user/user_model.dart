@@ -1,5 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:simple_crud/core/extensions/strings_extensions.dart';
+import 'package:simple_crud/domain/entities/serializable/serializable.dart';
 part 'user_model.g.dart';
 
 @JsonSerializable(explicitToJson: true)
@@ -32,6 +33,8 @@ class User {
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
   Map<String, dynamic> toJson() => _$UserToJson(this);
+  Serializable serialize() => Serializable(toJson());
+  factory User.deserialize(Serializable serial) => User.fromJson(serial.json);
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -39,6 +42,8 @@ class UserCollection {
   final List<User> users;
   const UserCollection(this.users);
 
-  factory UserCollection.fromJson(Map<String, dynamic> json) => _$UserCollectionFromJson(json);
+  factory UserCollection.fromJson(Map<String, dynamic> json) =>
+      _$UserCollectionFromJson(json);
   Map<String, dynamic> toJson() => _$UserCollectionToJson(this);
+  Serializable serialize() => Serializable(toJson());
 }
