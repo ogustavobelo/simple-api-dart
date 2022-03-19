@@ -35,7 +35,7 @@ class UsersController extends BaseController {
   @Route.get('/users/<id>')
   Response _listUser(Request request) {
     final id = request.params['id'];
-    final authorization = request.headers["authorization"];
+    // final authorization = request.headers["authorization"];
     return Response.ok('$id\n');
   }
 

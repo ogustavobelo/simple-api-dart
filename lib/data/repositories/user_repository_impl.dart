@@ -2,7 +2,6 @@ import 'package:injectable/injectable.dart';
 import 'package:simple_crud/data/datasources/local/users/users_local_datasource.dart';
 import 'package:simple_crud/data/helpers/users_helper.dart';
 import 'package:simple_crud/data/models/mappers/user_serialize_mapper.dart';
-import 'package:simple_crud/data/models/user/user_model.dart';
 import 'package:simple_crud/domain/entities/serializable/serializable.dart';
 import 'package:simple_crud/domain/repositories/user_repository.dart';
 
