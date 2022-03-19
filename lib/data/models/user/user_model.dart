@@ -1,5 +1,4 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:simple_crud/core/extensions/strings_extensions.dart';
 import 'package:simple_crud/domain/entities/user/user.dart';
 part 'user_model.g.dart';
 
@@ -19,20 +18,9 @@ class UserModel extends User {
           updatedAt: updatedAt,
         );
 
-  factory UserModel.simple({
-    required String name,
-    required String email,
-  }) {
-    return UserModel(
-      uid: StringUtils.uuid(),
-      name: name,
-      email: email,
-      createdAt: DateTime.now(),
-    );
-  }
-
-  factory UserModel.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
-  Map<String, dynamic> toJson() => _$UserToJson(this);
+  factory UserModel.fromJson(Map<String, dynamic> json) =>
+      _$UserModelFromJson(json);
+  Map<String, dynamic> toJson() => _$UserModelToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true)

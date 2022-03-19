@@ -35,9 +35,9 @@ void main() {
     });
 
     group("Save User", () {
+      final userModel = UserFixture.model;
+      final userJson = userModel.toJson();
       test("When save successfully, should return an updated user", () async {
-        final userModel = UserFixture.model;
-        final userJson = userModel.toJson();
         when(() => database.save(Collections.users, userJson))
             .thenAnswer((_) async => userJson);
         final result = await sut.saveUser(userModel);
@@ -47,8 +47,6 @@ void main() {
 
       test("When save fails, should throw an LocalDataSourceException",
           () async {
-        final userModel = UserFixture.model;
-        final userJson = userModel.toJson();
         when(() => database.save(Collections.users, userJson))
             .thenThrow(Exception());
         try {

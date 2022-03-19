@@ -23,14 +23,6 @@ void main() {
       expect(result["createdAt"], isNotNull);
       expect(result["updatedAt"], isNotNull);
     });
-
-    test("Should create a User Object from simple infos", () {
-      final result = UserModel.simple(name: "name", email: "email");
-      expect(result.uid, isNotNull);
-      expect(result.createdAt, isNotNull);
-      expect(result.name, "name");
-      expect(result.email, "email");
-    });
   });
 
   group("UserCollection >", () {
