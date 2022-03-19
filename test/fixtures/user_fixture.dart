@@ -17,3 +17,11 @@ class UserFixture {
     updatedAt: DateTime(2022, 01, 02),
   );
 }
+
+class UserCollectionFixture {
+  static Map<String, dynamic> json = {
+    "users": [UserFixture.json],
+  };
+
+  static UserCollection model = UserCollection([UserFixture.model]);
+}

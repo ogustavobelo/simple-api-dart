@@ -32,4 +32,18 @@ void main() {
       expect(result.email, "email");
     });
   });
+
+  group("UserCollection >", () {
+    test("Should parse FROM JSON correctly", () {
+      final sut = UserCollection.fromJson(UserCollectionFixture.json);
+      expect(sut.users.length, 1);
+      expect(sut.users.first.uid, "uid");
+    });
+
+    test("Should parse TO JSON correctly", () {
+      final sut = UserCollectionFixture.model.toJson();
+      expect(sut["users"], isNotNull);
+      expect(sut["users"][0]["uid"], "uid");
+    });
+  });
 }
