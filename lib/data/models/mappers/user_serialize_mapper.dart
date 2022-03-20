@@ -3,7 +3,10 @@ import 'package:simple_crud/domain/entities/serializable/serializable.dart';
 
 extension UserSerialize on UserModel {
   Serializable serialize() => Serializable(toJson());
-  UserModel deserialize(Serializable serial) => UserModel.fromJson(serial.json);
+}
+
+extension SerializableMapper on Serializable {
+  UserModel deserializeUser() => UserModel.fromJson(json);
 }
 
 extension UserCollectionSerialize on UserCollection {
