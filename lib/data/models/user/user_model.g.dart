@@ -14,15 +14,27 @@ UserModel _$UserModelFromJson(Map<String, dynamic> json) => UserModel(
       updatedAt: json['updatedAt'] == null
           ? null
           : DateTime.parse(json['updatedAt'] as String),
+      token: json['token'] as String?,
     );
 
-Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
-      'uid': instance.uid,
-      'name': instance.name,
-      'email': instance.email,
-      'createdAt': instance.createdAt.toIso8601String(),
-      'updatedAt': instance.updatedAt?.toIso8601String(),
-    };
+Map<String, dynamic> _$UserModelToJson(UserModel instance) {
+  final val = <String, dynamic>{
+    'uid': instance.uid,
+    'name': instance.name,
+    'email': instance.email,
+    'createdAt': instance.createdAt.toIso8601String(),
+  };
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('updatedAt', instance.updatedAt?.toIso8601String());
+  writeNotNull('token', instance.token);
+  return val;
+}
 
 UserCollection _$UserCollectionFromJson(Map<String, dynamic> json) =>
     UserCollection(

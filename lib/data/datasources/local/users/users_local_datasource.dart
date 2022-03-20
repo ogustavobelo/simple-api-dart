@@ -1,5 +1,5 @@
 import 'package:injectable/injectable.dart';
-import 'package:simple_crud/core/exceptions/local_datasource_exceptions.dart';
+import 'package:simple_crud/domain/exceptions/local_datasource_exceptions.dart';
 import 'package:simple_crud/data/datasources/local/database/acess_database.dart';
 import 'package:simple_crud/data/datasources/local/database/collections.dart';
 import 'package:simple_crud/data/models/user/user_model.dart';

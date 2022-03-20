@@ -2,14 +2,19 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:simple_crud/domain/entities/user/user.dart';
 part 'user_model.g.dart';
 
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable(
+  explicitToJson: true,
+  includeIfNull: false,
+)
 class UserModel extends User {
+  final String? token;
   const UserModel({
     required String uid,
     required String name,
     required String email,
     required DateTime createdAt,
     DateTime? updatedAt,
+    this.token,
   }) : super(
           uid: uid,
           name: name,

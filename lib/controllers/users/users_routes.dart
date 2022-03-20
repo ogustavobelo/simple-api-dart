@@ -4,6 +4,8 @@ import 'package:injectable/injectable.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
 import 'package:simple_crud/controllers/base/base_controller.dart';
+import 'package:simple_crud/core/middlewares/auth_middleware.dart';
+import 'package:simple_crud/domain/entities/serializable/serializable.dart';
 import 'package:simple_crud/domain/usecases/list_users_usecase.dart';
 import 'package:simple_crud/domain/usecases/save_user_usecase.dart';
 import 'package:simple_crud/core/extensions/strings_extensions.dart';
@@ -11,16 +13,30 @@ import 'package:simple_crud/core/extensions/strings_extensions.dart';
 part 'users_routes.g.dart';
 
 @singleton
-class UsersController extends BaseController {
+class UsersController {
   UsersController({
+    required UsersPrivateController privateController,
+    required UsersPublicController publicController,
+  })  : _privateController = privateController,
+        _publicController = publicController;
+  final UsersPrivateController _privateController;
+  final UsersPublicController _publicController;
+
+  Handler get router => Cascade()
+      .add(_publicController.routes)
+      .add(_privateController.routes)
+      .handler;
+}
+
+@injectable
+class UsersPrivateController extends BaseController {
+  UsersPrivateController({
     required ListUserUseCase listUserUseCase,
     required SaveUserUseCase saveUserUseCase,
-  })  : _listUsersUC = listUserUseCase,
-        _saveUserUC = saveUserUseCase;
+  }) : _listUsersUC = listUserUseCase;
   final ListUserUseCase _listUsersUC;
-  final SaveUserUseCase _saveUserUC;
 
-  @Route.get('/users')
+  @Route.get("/")
   Future<Response> listUsers(Request request) async {
     try {
       final authorization = request.headers["authorization"];
@@ -32,26 +48,26 @@ class UsersController extends BaseController {
     }
   }
 
-  @Route.get('/users/<id>')
-  Response _listUser(Request request) {
-    final id = request.params['id'];
-    // final authorization = request.headers["authorization"];
-    return Response.ok('$id\n');
+  @Route.get("/renew_token/<id>")
+  Response _generateToken(Request request, String? id) {
+    if (id == null) return error("User uid is required");
+    final token = JwtAuthUtils.auth(id);
+    return success(object: Serializable({"token": token}));
   }
 
-  @Route.put('/users/<id>')
-  Response _updateUser(Request request) {
-    final id = request.params['id'];
-    return Response.ok('$id\n');
-  }
+  Handler get routes => Pipeline()
+      .addMiddleware(AuthMiddleware().jwt())
+      .addHandler(_$UsersPrivateControllerRouter(this));
+}
 
-  @Route.delete('/users/<id>')
-  Response _deleteUser(Request request) {
-    final id = request.params['id'];
-    return Response.ok('$id\n');
-  }
+@injectable
+class UsersPublicController extends BaseController {
+  UsersPublicController({
+    required SaveUserUseCase saveUserUseCase,
+  }) : _saveUserUC = saveUserUseCase;
+  final SaveUserUseCase _saveUserUC;
 
-  @Route.post('/users')
+  @Route.post('/')
   Future<Response> _createUser(Request request) async {
     try {
       final json = jsonDecode(await request.readAsString());
@@ -72,8 +88,5 @@ class UsersController extends BaseController {
     }
   }
 
-  @Route.all('/<ignored|.*>')
-  Response _notFound(Request request) => Response.notFound('Page not found');
-
-  Router get router => _$UsersControllerRouter(this);
+  Router get routes => _$UsersPublicControllerRouter(this);
 }

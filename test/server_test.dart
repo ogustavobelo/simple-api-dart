@@ -31,10 +31,10 @@ void main() {
         expect(response.body, 'Simple Crud Dart API!\n');
       });
 
-      test('Users', () async {
-        final response = await get(Uri.parse(host + '/users'),
+      test('Users > When has a invalida token, should return 403', () async {
+        final response = await get(Uri.parse(host + '/users/'),
             headers: {"Authorization": "Bearer test"});
-        expect(response.statusCode, 200);
+        expect(response.statusCode, 403);
       });
       test('404', () async {
         final response = await get(Uri.parse(host + '/foobar'));

@@ -10,5 +10,8 @@ class GenericController extends BaseController {
     return message('Simple Crud Dart API!\n');
   }
 
+  @Route.all('/<ignored|.*>')
+  Response _notFound(Request request) => Response.notFound('Page not found');
+
   Router get router => _$GenericControllerRouter(this);
 }

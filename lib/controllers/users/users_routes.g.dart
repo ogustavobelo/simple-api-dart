@@ -6,13 +6,15 @@ part of 'users_routes.dart';
 // ShelfRouterGenerator
 // **************************************************************************
 
-Router _$UsersControllerRouter(UsersController service) {
+Router _$UsersPrivateControllerRouter(UsersPrivateController service) {
   final router = Router();
-  router.add('GET', r'/users', service.listUsers);
-  router.add('GET', r'/users/<id>', service._listUser);
-  router.add('PUT', r'/users/<id>', service._updateUser);
-  router.add('DELETE', r'/users/<id>', service._deleteUser);
-  router.add('POST', r'/users', service._createUser);
-  router.all(r'/<ignored|.*>', service._notFound);
+  router.add('GET', r'/', service.listUsers);
+  router.add('GET', r'/renew_token/<id>', service._generateToken);
+  return router;
+}
+
+Router _$UsersPublicControllerRouter(UsersPublicController service) {
+  final router = Router();
+  router.add('POST', r'/', service._createUser);
   return router;
 }

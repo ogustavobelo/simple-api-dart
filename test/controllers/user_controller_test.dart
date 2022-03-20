@@ -19,7 +19,7 @@ void main() {
   group("UserController >", () {
     final listUserMock = MockListUserUseCase();
     final saveUserMock = MockSaveUserUseCase();
-    final sut = UsersController(
+    final sut = UsersPrivateController(
       listUserUseCase: listUserMock,
       saveUserUseCase: saveUserMock,
     );
