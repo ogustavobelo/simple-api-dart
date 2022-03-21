@@ -46,18 +46,7 @@ void main() {
       when(() => getIt<Environment>().dbHost).thenReturn(dbHost);
       when(() => getIt<Environment>().dbPort).thenReturn(dbPort);
 
-      test("When create without spy, should just break", () async {
-        try {
-          final result =
-              await AccessDatabaseImpl.create();
-          expect(result, isNull);
-        } catch (e) {
-          expect(e, isA<Exception>());
-        
-        }
-      });
-
-      test("When create fails, should log and rethrow", () async {
+       test("When create fails, should log and rethrow", () async {
         try {
           final result =
               await AccessDatabaseImpl.create(spy: (_) => throw Exception());
@@ -67,6 +56,17 @@ void main() {
           verify(() =>
                   getIt<Logger>().debug("Cannot open database", any(), any()))
               .called(1);
+        }
+      });
+
+      test("When create without spy, should just break", () async {
+        try {
+          final result =
+              await AccessDatabaseImpl.create();
+          expect(result, isNull);
+        } catch (e) {
+          expect(e, isA<Exception>());
+        
         }
       });
 
