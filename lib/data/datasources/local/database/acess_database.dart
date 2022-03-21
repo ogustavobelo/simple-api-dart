@@ -10,7 +10,7 @@ abstract class AccessDatabase {
 }
 
 class AccessDatabaseImpl implements AccessDatabase {
-  AccessDatabaseImpl._(this.instance);
+  AccessDatabaseImpl(this.instance);
   final Db instance;
 
   @override
@@ -33,7 +33,8 @@ class AccessDatabaseImpl implements AccessDatabase {
     }
   }
 
-  static Future<AccessDatabaseImpl> create() async {
+  static Future<AccessDatabaseImpl> create(
+      {Future<Db> Function(String)? spy}) async {
     final env = getIt<Environment>();
     final logger = getIt<Logger>();
 
@@ -41,10 +42,12 @@ class AccessDatabaseImpl implements AccessDatabase {
     try {
       logger.info(
           "Starting db on path $dbPath at ${DateTime.now().toIso8601String()}...");
-      final db = await Db.create(dbPath);
+      Future<Db> createMethod(String path) =>
+          spy?.call(path) ?? Db.create(path);
+      final db = await createMethod(dbPath);
       await db.open();
       logger.info("Database inited successfully!");
-      return AccessDatabaseImpl._(db);
+      return AccessDatabaseImpl(db);
     } catch (e, st) {
       logger.debug("Cannot open database", e, st);
       rethrow;
