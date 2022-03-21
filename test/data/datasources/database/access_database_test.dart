@@ -39,33 +39,41 @@ void main() {
       expect(result, map2);
     });
 
-    test("When create fails, should log and rethrow", () async {
-      try {
-        final result = await AccessDatabaseImpl.create();
-        expect(result, isNull);
-      } catch (e) {
-        expect(e, isNotNull);
-      }
-    });
-
-    test("When create succeed, should return a valid implementation", () async {
+    group("Create >", () {
       final dbHost = "0.0.0.0";
       final dbPort = 1234;
       bool dbOpened = false;
       when(() => getIt<Environment>().dbHost).thenReturn(dbHost);
       when(() => getIt<Environment>().dbPort).thenReturn(dbPort);
-      when(() => db.open()).thenAnswer((_) async {
-        dbOpened = true;
-        return dbOpened;
-      });
-      final result = await AccessDatabaseImpl.create(spy: (path) async {
-        expect(path, "mongodb://$dbHost:$dbPort/crud");
-        return db;
+
+      test("When create fails, should log and rethrow", () async {
+        try {
+          final result =
+              await AccessDatabaseImpl.create(spy: (_) => throw Exception());
+          expect(result, isNull);
+        } catch (e) {
+          expect(e, isA<Exception>());
+          verify(() =>
+                  getIt<Logger>().debug("Cannot open database", any(), any()))
+              .called(1);
+        }
       });
 
-      expect(result, isNotNull);
-      expect(result.instance, db);
-      expect(dbOpened, true);
+      test("When create succeed, should return a valid implementation",
+          () async {
+        when(() => db.open()).thenAnswer((_) async {
+          dbOpened = true;
+          return dbOpened;
+        });
+        final result = await AccessDatabaseImpl.create(spy: (path) async {
+          expect(path, "mongodb://$dbHost:$dbPort/crud");
+          return db;
+        });
+
+        expect(result, isNotNull);
+        expect(result.instance, db);
+        expect(dbOpened, true);
+      });
     });
   });
 }
