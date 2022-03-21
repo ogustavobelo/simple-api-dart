@@ -39,6 +39,18 @@ void main() {
         expect(result.statusCode, 200);
       });
 
+      test("When has no auth, should return a 403 status code", () async {
+        when(() => listUserMock.call())
+            .thenAnswer((_) async => UserCollection([]).serialize());
+        final requestWithoutAuth = Request(
+          "get",
+          Uri(scheme: "scheme", path: "/users"),
+        );
+        final result = await sut.listUsers(requestWithoutAuth);
+
+        expect(result.statusCode, 403);
+      });
+
       test("When fails should return a 400 status code", () async {
         when(() => listUserMock.call()).thenThrow(Exception());
 
